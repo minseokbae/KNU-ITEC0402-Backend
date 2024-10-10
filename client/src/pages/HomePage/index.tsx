@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import { signOut } from 'firebase/auth'; // Firebase signOut 함수 임포트
