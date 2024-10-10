@@ -2,7 +2,7 @@ const express = require('express'); // Express 모듈
 const admin = require('firebase-admin'); // Firebase Admin SDK를
 const bodyParser = require('body-parser'); // HTTP 요청 본문을 파싱하기 위한 미들웨어
 const cors = require('cors'); // CORS(Cross-Origin Resource Sharing)를 허용하기 위한 미들웨어
-const serviceAccount = require('./membership-3bc56-0f7adc65953a.json'); // Firebase 서비스 계정 키 파일
+// const serviceAccount = require('./membership-3bc56-0f7adc65953a.json'); // Firebase 서비스 계정 키 파일
 const dotenv = require('dotenv');
 const axios = require('axios');
 const fs = require('fs'); // fs 모듈 추가
@@ -106,7 +106,7 @@ let data = [];
 // });
 
 
-// const db = admin.firestore(); // Firestore 데이터베이스 초기화
+
 dotenv.config();
 const app = express(); // Express 애플리케이션 인스턴스를 생성
 const port = 5326; // 서버가 청취할 포트를 설정
@@ -114,58 +114,7 @@ const port = 5326; // 서버가 청취할 포트를 설정
 app.use(bodyParser.json()); // 모든 요청 본문을 JSON 형식으로 파싱하도록 설정
 app.use(cors()); // 모든 도메인에서의 요청을 허용(CORS)하도록 설정
 app.use(express.json());
-// 사용자 UID를 기반으로 InfluxDB 버킷 생성하는 함수
-// const createUserBucket = async (uid) => {
-//   try {
-//     const bucketName = `user_${uid}`;  // UID를 기반으로 고유 버킷 이름 생성
-//     const retentionRules = [{
-//       type: 'expire',
-//       everySeconds: 3600 * 24 * 30,  // 30일 동안 데이터 보관
-//     }];
 
-//     // InfluxDB 버킷 생성
-//     const bucket = await bucketsAPI.postBuckets({
-//       body: {
-//         orgID: targetOrg,  // 조직 ID 설정
-//         name: bucketName,  // 버킷 이름을 UID로 설정
-//         retentionRules: retentionRules,  // 데이터 보관 정책
-//       },
-//     });
-
-//     console.log(`사용자 ${uid}의 InfluxDB 버킷이 생성되었습니다: ${bucketName}`);
-//     return bucketName; // 생성된 버킷 이름 반환
-//   } catch (error) {
-//     console.error('InfluxDB 버킷 생성 중 오류 발생:', error);
-//     throw error;
-//   }
-// };
-
-// 회원가입 라우트 정의
-// app.post('/signup', async (req, res) => {
-//   const { email, password } = req.body; // 요청 본문에서 이메일과 비밀번호를 추출
-
-//   try {
-//     // Firebase Authentication을 사용하여 새 사용자를 생성
-//     const userRecord = await admin.auth().createUser({ email, password });
-
-//     // Firestore에 사용자 데이터 저장
-//     await db.collection('users').doc(userRecord.uid).set({
-//       email: email,
-//       createdAt: admin.firestore.FieldValue.serverTimestamp(),
-//     });
-
-//     // Firebase UID를 기반으로 InfluxDB 버킷 생성
-//     const bucketName = await createUserBucket(userRecord.uid);
-
-//     // 사용자 생성이 성공하면, 생성된 사용자의 UID를 클라이언트에 반환
-//     res.status(201).send({ uid: userRecord.uid, bucketName });
-    
-//   } catch (error) {
-//     // 사용자 생성 중 오류가 발생하면, 오류 메시지를 클라이언트에 반환
-//     console.error('Error creating new user:', error);
-//     res.status(400).send({ error: error.message });
-//   }
-// });
 
 // 회원가입 api
 app.post('/register', async (req, res) => {

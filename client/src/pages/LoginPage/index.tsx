@@ -7,8 +7,8 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from '../../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -18,17 +18,8 @@ const LoginPage = () => {
 
   const [show, setShow] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage('');
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setMessage('Login successful');
-      navigate('/');
-    } catch (error) {
-      alert(`Error: ${(error as Error).message}`);
-    }
+  const handleSubmit = async () => {
+    
   };
 
   const handleClick = () => {
