@@ -3,7 +3,7 @@ import { createContext, useState, useEffect, ReactNode } from 'react';
 // 로그인 상태와 로그인/로그아웃 함수를 포함하는 타입 정의
 interface AuthContextType {
   isLoggedIn: boolean;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -24,10 +24,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const login = () => {
-    setIsLoggedIn(true);
-    // 로컬 스토리지에 토큰을 저장하는 로직 추가
-    localStorage.setItem('token', 'your-jwt-token');
+  const login = (token: string) => {
+    // 백엔드에서 받은 JWT 토큰을 로컬 스토리지에 저장
+    localStorage.setItem('token', token);
+    setIsLoggedIn(true);  // 로그인 상태 업데이트
   };
 
   const logout = () => {

@@ -1,29 +1,32 @@
 
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
 
 
-const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
+
+const HomePage = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, logout } = useContext(AuthContext);
+
   const handleClick = () => {
-      navigate("/login"); // 로그인 페이지로 이동
+
+      if (isLoggedIn) {
+        logout(); // 로그아웃
+      } else {
+        navigate('/login'); // 로그인 페이지로 이동
+      }
+
   };
-  const handleLogout = () => {
-    // 로컬 스토리지에서 토큰 제거
-    localStorage.removeItem('token');
-    // isLoggedIn 상태 false로 설정
-    setIsLoggedIn(false);
-    // 로그아웃 후 메인 페이지로 이동
-    navigate('/');
-  };
+  
 
    
 
   return (
     <div>
-      HomePage
+      <h1>HomePage</h1>
       <button onClick={handleClick}>
-        {"로그인하기"}
+        {isLoggedIn ? "로그아웃" : "로그인하기"}
       </button>
     </div>
   );
