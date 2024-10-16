@@ -110,11 +110,15 @@ let data = [];
 dotenv.config();
 const app = express(); // Express 애플리케이션 인스턴스를 생성
 const port = 5326; // 서버가 청취할 포트를 설정
+const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 
 app.use(bodyParser.json()); // 모든 요청 본문을 JSON 형식으로 파싱하도록 설정
 app.use(cors()); // 모든 도메인에서의 요청을 허용(CORS)하도록 설정
 app.use(express.json());
-
+app.use('/auth', authRoutes);   // 회원가입 및 로그인 라우트
+app.use('/user', profileRoutes);  // 보호된 프로필 라우트
+const JWT_SECRET = 'your_jwt_secret_key';
 
 // 회원가입 api
 app.post('/register', async (req, res) => {
@@ -155,32 +159,51 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// 로그인 라우트
+app.post('/login', async (req, res) => {
+  const { id, password } = req.body;
 
-
-
-
-
-
-
-
-
-
-
-// 특정 사용자의 정보를 가져오는 라우트 정의
-app.get('/user/:uid', async (req, res) => {
-  const uid = req.params.uid; // URL 경로에서 사용자 UID를 추출
+  // 1. 사용자 확인
+  if (!id || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
 
   try {
-    // Firebase Authentication에서 UID에 해당하는 사용자 정보
-    const userRecord = await admin.auth().getUser(uid);
-    // 사용자 정보를 클라이언트에 반환
-    res.send(userRecord);
-  } catch (error) {
-    // 사용자 정보를 가져오는 중 오류가 발생하면, 오류 메시지를 클라이언트에 반환
-    console.error('Error fetching user data:', error);
-    res.status(404).send({ error: error.message });
+    // 2. DB에서 사용자 찾기
+    const [rows] = await db.query('SELECT * FROM User WHERE username = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(400).json({ message: 'User not found.' });
+    }
+
+    const user = rows[0];
+
+    // 3. 비밀번호 검증
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid password.' });
+    }
+
+    // 4. JWT 발급
+    const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+
+    // 5. 클라이언트에 토큰 반환
+    res.status(200).json({
+      message: 'Login successful',
+      token
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+
+
+
+
+
+
 
 // 기본 라우트 정의
 app.get('/', (req, res) => {
