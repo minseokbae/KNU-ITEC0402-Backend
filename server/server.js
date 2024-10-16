@@ -15,13 +15,13 @@ const database = require('./config/db');
 
 // 원본 InfluxDB 설정
 const url = 'http://ts.nexa-ds.com';  // 원본 InfluxDB 서버 URL
-const token = 'dSW6mKOhbAYHXg0-ys6W0hCEUDJEgrZy950bFG2Cqam1we-oXUzDpjE00XOEp73PKFO7BLoxe7RDMGYOZY-I0g=='; // 원본 InfluxDB 토큰
+const token = 'dSW6mKOhbAYHXg0-ys6W0hCEUDJEgrZy950bFG2Cqam1we-oXUzDpjE00XOEp73PKFO7BLoxe7RDMGYOZY-I0g=='; // 원본 InfluxDB 토큰(환경변수 사용 예정)
 const org = 'nexads';           // 원본 조직 이름
 const bucket = 'TestKsy';       // 원본 버킷 이름
 
 // 타겟 InfluxDB 설정 (데이터 복사할 InfluxDB)
 const targetUrl = 'https://us-east-1-1.aws.cloud2.influxdata.com';  // 타겟 InfluxDB 서버 URL
-const targetToken = 'qHMH4KoR83b4nVuILRwduS_hghnnKTqwPitcUxxici8rH5BGFhFVyi1QQWnLYC6v1MZ3LK6NwQ417gVrEGvbPw==';     // 타겟 InfluxDB 토큰
+const targetToken = 'qHMH4KoR83b4nVuILRwduS_hghnnKTqwPitcUxxici8rH5BGFhFVyi1QQWnLYC6v1MZ3LK6NwQ417gVrEGvbPw==';     // 타겟 InfluxDB 토큰(환경변수 사용 예정)
 const targetOrg = 'f928648a252d7ba5';
 const targetBucket = 'Test';              // 타겟 버킷 이름
 
@@ -188,6 +188,6 @@ app.get('/', (req, res) => {
 });
 
 // 서버 실행
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`); // 서버가 지정된 포트에서 실행 중임을 콘솔에 출력합니다.
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running at http://0.0.0.0:${port}`);
 });

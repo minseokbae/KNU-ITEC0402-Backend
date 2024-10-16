@@ -29,7 +29,7 @@ const SignUpPage = () => {
 
     try {
       // 회원가입 API 호출
-      const response = await fetch("http://localhost:5326/register", {
+      const response = await fetch("http://222.103.41.58:5326/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
