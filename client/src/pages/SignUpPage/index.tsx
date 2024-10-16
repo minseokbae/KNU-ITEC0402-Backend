@@ -8,6 +8,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
 
@@ -16,6 +17,7 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(""); // 응답 메시지 표시
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,6 +47,7 @@ const SignUpPage = () => {
       if (response.ok) {
         const data = await response.json();
         setMessage(data.message); // 성공 메시지 설정
+        navigate('/');
       } else {
         const errorData = await response.json();
         setMessage(errorData.message); // 오류 메시지 설정
