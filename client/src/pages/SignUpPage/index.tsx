@@ -54,7 +54,7 @@ const SignUpPage = () => {
       password={password}
       passwordConfirm={confirmPassword}
       onChangePasswordConfirm={(e) => setConfirmPassword(e.target.value)}
-      handleMove={() => navigate("/signup")}
+      handleMove={() => navigate("/login")}
       handleSubmit={handleSubmit}
       onChangeId={(e) => setId(e.target.value)}
       onChangePassword={(e) => setPassword(e.target.value)}
