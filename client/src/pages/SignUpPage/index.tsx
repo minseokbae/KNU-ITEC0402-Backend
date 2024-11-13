@@ -1,24 +1,13 @@
-import {
-  Button,
-  Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthSection from "../../components/AuthSection";
 
 const SignUpPage = () => {
-
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(""); // 응답 메시지 표시
-  const [show, setShow] = useState(false);
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // 기본 폼 제출 방지
@@ -47,7 +36,7 @@ const SignUpPage = () => {
       if (response.ok) {
         const data = await response.json();
         setMessage(data.message); // 성공 메시지 설정
-        navigate('/');
+        navigate("/");
       } else {
         const errorData = await response.json();
         setMessage(errorData.message); // 오류 메시지 설정
@@ -57,56 +46,19 @@ const SignUpPage = () => {
     }
   };
 
-
   return (
-    <>
-     <Heading>SignupPage</Heading>
-      <form onSubmit={handleSubmit}>
-        <FormControl isRequired>
-          <FormLabel>ID</FormLabel>
-          <Input
-            placeholder="Enter ID"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>Password</FormLabel>
-          <InputGroup size="md">
-            <Input
-              pr="4.5rem"
-              type={show ? "text" : "password"}
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? "Hide" : "Show"}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>Confirm Password</FormLabel>
-          <Input
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </FormControl>
-
-        <Button mt={4} type="submit" colorScheme="teal">
-          Sign Up
-        </Button>
-      </form>
-
-      {/* 서버 응답 메시지 출력 */}
-      {message && <p>{message}</p>}
-    </>
+    <AuthSection
+      isLogin={false}
+      message={message}
+      id={id}
+      password={password}
+      passwordConfirm={confirmPassword}
+      onChangePasswordConfirm={(e) => setConfirmPassword(e.target.value)}
+      handleMove={() => navigate("/login")}
+      handleSubmit={handleSubmit}
+      onChangeId={(e) => setId(e.target.value)}
+      onChangePassword={(e) => setPassword(e.target.value)}
+    />
   );
 };
 
