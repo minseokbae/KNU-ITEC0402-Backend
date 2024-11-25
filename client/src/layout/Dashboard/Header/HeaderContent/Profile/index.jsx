@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -19,11 +19,13 @@ import Box from '@mui/material/Box';
 import Avatar from 'components/@extended/Avatar';
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
+import AuthContext from 'context/AuthContext';
 
 // assets
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 
 import avatar1 from 'assets/images/users/avatar-1.png';
+import { useNavigate } from 'react-router';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -53,6 +55,14 @@ export default function Profile({ name }) {
   };
 
   const iconBackColorOpen = 'grey.100';
+
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -112,7 +122,7 @@ export default function Profile({ name }) {
                       </Grid>
                       <Grid item>
                         <Tooltip title="Logout">
-                          <IconButton size="large" sx={{ color: 'text.primary' }}>
+                          <IconButton size="large" onClick={handleLogout} sx={{ color: 'text.primary' }}>
                             <LogoutOutlined />
                           </IconButton>
                         </Tooltip>
