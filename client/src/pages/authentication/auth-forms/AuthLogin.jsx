@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 // material-ui
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -9,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
-
+import axios from 'axios';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -22,10 +23,13 @@ import AuthContext from 'context/AuthContext';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
+
 // ============================|| JWT - LOGIN ||============================ //
 
 export default function AuthLogin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // React Router에서 페이지 이동을 위해 사용
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -37,39 +41,23 @@ export default function AuthLogin() {
   const { login } = useContext(AuthContext);
 
   // 로그인 폼 제출 핸들러
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // 기본 폼 제출 방지
-
+  const handleSubmit = async (values) => {
     try {
-      // axios로 API 요청
       const response = await axios.post('http://222.103.41.58:5326/auth/login', {
-        id,
-        password
+        id: values.email,
+        password: values.password,
       });
 
-      // 서버 응답이 성공적일 경우
       if (response.status === 200) {
-        const token = response.data.token; // 백엔드에서 받은 JWT 토큰
-        // 로그인 성공 시 JWT 토큰을 로컬 스토리지에 저장
+        const token = response.data.token;
         login(token);
         setMessage('Login successful');
-        navigate('/'); // 로그인 후 보호된 페이지로 이동
+        navigate('/');
       }
     } catch (error) {
-      // AxiosError 타입으로 단언하여 처리
       if (axios.isAxiosError(error)) {
-        if (error.response) {
-          // 서버에서 반환된 오류 메시지를 처리
-          setMessage(error.response.data.message || 'Login failed');
-        } else if (error.request) {
-          // 요청이 전송되었지만 응답이 없을 때 처리
-          setMessage('No response from the server');
-        } else {
-          // 요청 설정 중에 발생한 오류 처리
-          setMessage('Error: ' + error.message);
-        }
+        setMessage(error.response?.data.message || 'Login failed');
       } else {
-        // Axios 외의 일반적인 오류 처리
         setMessage('An unexpected error occurred');
       }
     }
@@ -78,18 +66,22 @@ export default function AuthLogin() {
   return (
     <>
       <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().email('올바른 형식의 이메일이어야 합니다.').max(255).required('이메일을 입력하세요'),
-          password: Yup.string().max(255).required('비밀번호를 입력하세요.')
-        })}
-        handleSubmit={handleSubmit}
-      >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      initialValues={{
+        email: '',
+        password: '',
+        submit: null,
+      }}
+      validationSchema={Yup.object().shape({
+        email: Yup.string().email('올바른 이메일 형식이어야 합니다.').max(255).required('이메일을 입력하세요.'),
+        password: Yup.string().max(255).required('비밀번호를 입력하세요.'),
+      })}
+      onSubmit={async (values, { setSubmitting }) => {
+        setSubmitting(true);
+        await handleSubmit(values);
+        setSubmitting(false);
+      }}
+    >
+      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
