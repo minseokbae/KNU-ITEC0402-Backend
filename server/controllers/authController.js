@@ -8,25 +8,41 @@ const { v4: uuidv4 } = require('uuid');
 
 // 회원가입 로직
 const registerUser = async (req, res) => {
-    const { id, password, confirmPassword } = req.body;
-    const userId = uuidv4();
+  const { id, password, confirmPassword, companyName } = req.body; // companyName 추가
+  const userId = uuidv4(); // 고유 사용자 ID 생성
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
+  // 비밀번호 확인
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
+  }
+
+  try {
+    // 비밀번호 해싱
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 데이터베이스에 사용자 정보 저장 (companyName 포함)
+    const result = await db.query(
+      'INSERT INTO User (id, username, password, company_name) VALUES (?, ?, ?, ?)', 
+      [userId, id, hashedPassword, companyName]
+    );
+     // 쿼리 결과 로그 출력
+     console.log('DB Insert Result:', result);
+
+    // 성공 응답
+    res.status(201).json({ message: 'User registered successfully!' });
+  } catch (err) {
+    console.error(err);
+
+    // 중복 ID 에러 처리
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ message: 'User ID already exists' });
     }
-  
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await db.query('INSERT INTO User (id,username, password) VALUES (?,?, ?)', [userId,id, hashedPassword]);
-      res.status(201).json({ message: 'User registered successfully!' });
-    } catch (err) {
-      console.error(err);
-      if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(400).json({ message: 'User ID already exists' });
-      }
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
+
+    // 기타 서버 에러 처리
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
   
 
 
