@@ -4,19 +4,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const JWT_SECRET = process.env.JWT_SECRET;
-
+const { v4: uuidv4 } = require('uuid');
 
 // 회원가입 로직
 const registerUser = async (req, res) => {
     const { id, password, confirmPassword } = req.body;
-  
+    const userId = uuidv4();
+
     if (password !== confirmPassword) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
   
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      await db.query('INSERT INTO User (username, password) VALUES (?, ?)', [id, hashedPassword]);
+      await db.query('INSERT INTO User (id,username, password) VALUES (?,?, ?)', [userId,id, hashedPassword]);
       res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
       console.error(err);
