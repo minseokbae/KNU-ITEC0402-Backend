@@ -108,6 +108,7 @@ export default function AuthRegister() {
             .required('비밀번호 확인을 입력하세요.')
         })}
         handleSubmit={handleSubmit}
+
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
