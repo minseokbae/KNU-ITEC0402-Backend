@@ -19,24 +19,12 @@ const MainRoutes = {
   element: <Dashboard />,
   children: [
     {
-      path: 'color',
-      element: <Color />
-    },
-    {
-      path: 'month',
+      path: '/month',
       element: <SamplePage />
     },
     {
       path: '/day',
       element: <DashboardDefault />
-    },
-    {
-      path: 'shadow',
-      element: <Shadow />
-    },
-    {
-      path: 'typography',
-      element: <Typography />
     }
   ]
 };
