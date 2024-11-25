@@ -36,7 +36,7 @@ function TabPanel({ children, value, index, ...other }) {
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
-export default function Profile({ email }) {
+export default function Profile({ name }) {
   const theme = useTheme();
 
   const anchorRef = useRef(null);
@@ -73,7 +73,7 @@ export default function Profile({ email }) {
         <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src="" size="sm" />
           <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
-            {email}
+            {name}
           </Typography>
         </Stack>
       </ButtonBase>
@@ -106,7 +106,7 @@ export default function Profile({ email }) {
                         <Stack direction="row" spacing={1.25} alignItems="center">
                           <Avatar alt="profile user" src="" sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h6">{email}</Typography>
+                            <Typography variant="h6">{name}</Typography>
                           </Stack>
                         </Stack>
                       </Grid>

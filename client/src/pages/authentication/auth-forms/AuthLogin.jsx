@@ -23,7 +23,6 @@ import AuthContext from 'context/AuthContext';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
-
 // ============================|| JWT - LOGIN ||============================ //
 
 export default function AuthLogin() {
@@ -45,14 +44,14 @@ export default function AuthLogin() {
     try {
       const response = await axios.post('http://222.103.41.58:5326/auth/login', {
         id: values.email,
-        password: values.password,
+        password: values.password
       });
 
       if (response.status === 200) {
         const token = response.data.token;
         login(token);
         setMessage('Login successful');
-        navigate('/');
+        navigate('/day');
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -66,22 +65,22 @@ export default function AuthLogin() {
   return (
     <>
       <Formik
-      initialValues={{
-        email: '',
-        password: '',
-        submit: null,
-      }}
-      validationSchema={Yup.object().shape({
-        email: Yup.string().email('올바른 이메일 형식이어야 합니다.').max(255).required('이메일을 입력하세요.'),
-        password: Yup.string().max(255).required('비밀번호를 입력하세요.'),
-      })}
-      onSubmit={async (values, { setSubmitting }) => {
-        setSubmitting(true);
-        await handleSubmit(values);
-        setSubmitting(false);
-      }}
-    >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+        initialValues={{
+          email: '',
+          password: '',
+          submit: null
+        }}
+        validationSchema={Yup.object().shape({
+          email: Yup.string().email('올바른 이메일 형식이어야 합니다.').max(255).required('이메일을 입력하세요.'),
+          password: Yup.string().max(255).required('비밀번호를 입력하세요.')
+        })}
+        onSubmit={async (values, { setSubmitting }) => {
+          setSubmitting(true);
+          await handleSubmit(values);
+          setSubmitting(false);
+        }}
+      >
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>

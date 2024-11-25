@@ -27,7 +27,7 @@ export default function Header() {
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
   // header content
-  const headerContent = useMemo(() => <Profile email="hi@gmail.com" />, []);
+  const headerContent = useMemo(() => <Profile name="hi@gmail.com" />, []);
 
   const iconBackColor = 'grey.100';
   const iconBackColorOpen = 'grey.200';
