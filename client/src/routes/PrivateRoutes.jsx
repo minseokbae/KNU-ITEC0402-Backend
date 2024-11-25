@@ -1,9 +1,11 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
-const isLogin = !!localStorage.getItem('token');
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn } = useContext(AuthContext);
 
-const PrivateRoute = () => {
-  return isLogin ? <Outlet /> : <Navigate to="/login" />;
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

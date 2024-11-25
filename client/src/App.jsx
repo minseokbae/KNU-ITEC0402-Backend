@@ -10,12 +10,12 @@ import ScrollTop from 'components/ScrollTop';
 
 export default function App() {
   return (
-    <AuthProvider> 
+    <AuthProvider>
       <ThemeCustomization>
         <ScrollTop>
           <RouterProvider router={router} />
         </ScrollTop>
       </ThemeCustomization>
-    </AuthProvider> 
+    </AuthProvider>
   );
 }
