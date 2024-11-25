@@ -5,5 +5,6 @@
 ### 프론트 실행
 ```
 cd client
+npm i
 npm run start
 ```
