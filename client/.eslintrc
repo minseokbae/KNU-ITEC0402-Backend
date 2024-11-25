@@ -36,7 +36,10 @@
       "impliedStrict": true,
       "jsx": true
     },
-    "ecmaVersion": 12
+    "ecmaVersion": 12,
+    "babelOptions": {
+      "presets": ["@babel/preset-env", "@babel/preset-react"]
+    }
   },
   "plugins": ["prettier", "react", "react-hooks"],
   "rules": {
