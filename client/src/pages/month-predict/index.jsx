@@ -16,16 +16,16 @@ import { MonthDummy } from 'api/dummy';
 // sales report status
 const status = [
   {
-    value: 'today',
-    label: 'Today'
+    value: '9월',
+    label: 'September'
   },
   {
-    value: 'month',
-    label: 'This Month'
+    value: '10월',
+    label: 'October'
   },
   {
-    value: 'year',
-    label: 'This Year'
+    value: '11월',
+    label: 'November'
   }
 ];
 
