@@ -61,7 +61,7 @@ export default function SamplePage() {
         {/* row 2 */}
         <Grid item xs={12} md={7} lg={12}>
           <MainCard style={{ marginTop: '20px' }}>
-            <ReportAreaChart />
+            <ReportAreaChart data={data} />;
           </MainCard>
         </Grid>
 
