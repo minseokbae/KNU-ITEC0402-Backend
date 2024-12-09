@@ -1,5 +1,6 @@
 /* eslint-disable no-loss-of-precision */
 export const DayDummy2 = {
+  time: '17:00',
   fromnow: 30,
   fromafter: 30,
   real: [
@@ -69,6 +70,7 @@ export const DayDummy2 = {
 };
 
 export const DayDummy = {
+  time: '19:00',
   fromnow: 24,
   fromafter: 30,
   real: [

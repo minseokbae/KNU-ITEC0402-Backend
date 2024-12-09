@@ -24,25 +24,45 @@ const areaChartOptions = {
   }
 };
 
+// 타임스탬프 병합 함수
+function mergeTimestamps(real, predict) {
+  const allTimestamps = new Set([...real.map((entry) => entry.timestamp), ...predict.map((entry) => entry.timestamp)]);
+  return Array.from(allTimestamps).sort();
+}
+
+// 소수점 두 번째 자리에서 값 자르기 함수
+function truncateToTwoDecimalPlaces(value) {
+  return value !== null ? parseFloat(value.toFixed(2)) : null;
+}
+
 export default function IncomeAreaChart({ data }) {
   const theme = useTheme();
-
   const { secondary } = theme.palette.text;
   const line = theme.palette.divider;
 
   const [options, setOptions] = useState(areaChartOptions);
+  const [series, setSeries] = useState([]);
 
   useEffect(() => {
-    const timestamps = data.real.map((entry) => entry.timestamp); // x축 데이터: real의 timestamp 추출
+    const allTimestamps = mergeTimestamps(data.real, data.predict);
 
+    // 데이터 매핑 및 소수점 처리
+    const realData = allTimestamps.map((timestamp) =>
+      truncateToTwoDecimalPlaces(data.real.find((entry) => entry.timestamp === timestamp)?.kWh || null)
+    );
+    const predictData = allTimestamps.map((timestamp) =>
+      truncateToTwoDecimalPlaces(data.predict.find((entry) => entry.timestamp === timestamp)?.kWh || null)
+    );
+
+    // 차트 옵션 업데이트
     setOptions((prevState) => ({
       ...prevState,
       colors: [theme.palette.primary.main, theme.palette.primary[700]],
       xaxis: {
-        categories: timestamps, // x축에 timestamp 설정
+        categories: allTimestamps, // x축에 병합된 타임스탬프 설정
         labels: {
           style: {
-            colors: Array(timestamps.length).fill(secondary) // x축 레이블 색상
+            colors: Array(allTimestamps.length).fill(secondary) // x축 레이블 색상
           }
         },
         axisBorder: {
@@ -61,23 +81,19 @@ export default function IncomeAreaChart({ data }) {
         borderColor: line
       }
     }));
-  }, [theme, data]);
 
-  const [series, setSeries] = useState([]);
-
-  useEffect(() => {
-    // 실제 데이터와 예측 데이터 설정
+    // 시리즈 데이터 업데이트
     setSeries([
       {
         name: '실제 전력량',
-        data: data.real.map((entry) => entry.kWh)
+        data: realData
       },
       {
         name: '예측 전력량',
-        data: data.predict.map((entry) => entry.kWh)
+        data: predictData
       }
     ]);
-  }, [data]);
+  }, [theme, data]);
 
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 }

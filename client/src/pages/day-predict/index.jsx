@@ -9,25 +9,13 @@ import ReportAreaChart from 'components/charts/ReportAreaChart';
 import MainCard from 'components/MainCard';
 import { Button } from '@mui/material';
 import Loader from 'components/Loader';
+import UniqueVisitorCard from 'components/charts/UniqueVisitorCard';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
   const [data, setData] = useState(DayDummy);
   const [isLoading, setIsLoading] = useState(false);
-  // graphData 생성 함수
-  const createGraphData = (data) => {
-    const realData = data.real.map((entry) => entry.kWh); // real의 kWh 값만 추출
-    const predictData = data.predict.map((entry) => entry.kWh); // predict의 kWh 값만 추출
-
-    return {
-      real: realData,
-      predict: predictData
-    };
-  };
-
-  // DayDummy 데이터를 사용하여 graphData 생성
-  const graphData = createGraphData(data);
 
   const handleClickUpdate = () => {
     setData(DayDummy2);
@@ -55,7 +43,7 @@ export default function DashboardDefault() {
           </Grid>
           <Grid item xs={12} sx={{ mb: -2.25 }}></Grid>
           <Grid item xs={12} sm={6} md={4} lg={6}>
-            <AnalyticEcommerce title="현 시점까지 실에너지 사용량" count={`${data.fromnow}kw`} />
+            <AnalyticEcommerce title={`${data.time}까지 실에너지 사용량`} count={`${data.fromnow}kw`} />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={6}>
             <AnalyticEcommerce title="자정까지 예측량 포함" count={`${data.fromafter}kw`} />
@@ -71,7 +59,7 @@ export default function DashboardDefault() {
               </Grid>
             </Grid>
             <MainCard>
-              <ReportAreaChart />
+              <UniqueVisitorCard data={data} />
             </MainCard>
           </Grid>
         </Grid>

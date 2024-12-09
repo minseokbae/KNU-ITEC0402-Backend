@@ -12,6 +12,7 @@ import MainCard from 'components/MainCard';
 import UniqueVisitorCard from '../../components/charts/UniqueVisitorCard';
 import OrdersTable from '../../components/charts/OrdersTable';
 import { MonthDummy } from 'api/dummy';
+import ReportAreaChart from 'components/charts/ReportAreaChart';
 
 // sales report status
 const status = [
@@ -59,7 +60,9 @@ export default function SamplePage() {
 
         {/* row 2 */}
         <Grid item xs={12} md={7} lg={12}>
-          <UniqueVisitorCard data={data} />
+          <MainCard style={{ marginTop: '20px' }}>
+            <ReportAreaChart />
+          </MainCard>
         </Grid>
 
         {/* row 3 */}
